@@ -3,12 +3,22 @@ const functions = require("../functions.js");
 
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const mainAssistant = addKeyword(["ASESOR"], {
+const exitMessage = {
+	body: ["¡Muchas gracias!", "Tenga buen día 👋."].join("\n"),
+};
+
+//Keywords Regex
+const regex = "^(ASESOR)$";
+
+//Options Regex
+const validatorRegex = "^(0|1)$";
+
+const mainAssistant = addKeyword([regex], {
 	sensitive: true,
 })
 	.addAnswer(
 		[
-			"*¡Servicio de Atención al Cliente!*".toUpperCase(),
+			"📩 *¡Servicio de Atención al Cliente!*".toUpperCase(),
 			"",
 			"_Porfavor a continuación escriba *un* solo mensaje detallando su solicitud._",
 		],
@@ -32,16 +42,28 @@ const mainAssistant = addKeyword(["ASESOR"], {
 		}
 	)
 	.addAnswer(
-		["Para regresar escriba *MENU*"],
+		[
+			"Porfavor, seleccione un *NÚMERO* para continuar.",
+			"",
+			"0️⃣. Regresar",
+			"1️⃣. Salir",
+		],
 		{
 			capture: true,
 			delay: functions.randomIntFromInterval(400, 600),
 		},
-		(ctx, { fallBack }) => {
-			if (ctx.body !== "MENU") {
+		(ctx, { fallBack, endFlow }) => {
+			if (!ctx.body.match(validatorRegex)) {
 				return fallBack(
-					"⚠ ¡Porfavor, escriba la palabra *MENU* correctamente!."
+					[
+						"*⚠ Seleccione una opción correcta:*",
+						"",
+						"0️⃣. Regresar",
+						"1️⃣. Salir",
+					].join("\n")
 				);
+			} else if (ctx.body === "1") {
+				return endFlow(exitMessage);
 			}
 		}
 	);

@@ -7,12 +7,10 @@ const exitMessage = {
 	body: ["¡Muchas gracias!", "Tenga buen día 👋."].join("\n"),
 };
 
-//Flows
-const mainSignUp = require("./mainSignUp.js");
-const mainMenu = require("./mainMenu.js");
+//Options Regex
+const validatorRegex = "^(0|1)$";
 
 //Main Flow
-let word = "REGISTRO";
 const mainFlow = addKeyword([EVENTS.WELCOME])
 	.addAnswer(
 		[
@@ -26,54 +24,25 @@ const mainFlow = addKeyword([EVENTS.WELCOME])
 		}
 	)
 	.addAnswer(
-		["_¿Desea Continuar?_", "", "1️⃣. Sí", "2️⃣. No"],
+		["_¿Desea Continuar?_", "", "0️⃣. Sí", "1️⃣. No"],
 		{
 			capture: true,
 			delay: functions.randomIntFromInterval(400, 600),
 		},
-		async (ctx, { fallBack, flowDynamic, endFlow }) => {
-			if (ctx.body !== "1" && ctx.body !== "2") {
+		async (ctx, { fallBack, endFlow }) => {
+			if (!ctx.body.match(validatorRegex)) {
 				return fallBack(
 					[
-						"*⚠ Seleccione una Opción Correcta:*",
+						"*⚠ Seleccione una opción correcta:*",
 						"",
-						"1️⃣. Sí",
-						"2️⃣. No",
+						"0️⃣. Sí",
+						"1️⃣. No",
 					].join("\n")
 				);
-			} else if (ctx.body === "2") {
+			} else if (ctx.body === "1") {
 				return endFlow(exitMessage);
-			} else {
-				customer = await strapi.getCustomerByPhone(ctx.from);
-				if (customer !== null) {
-					flowDynamic(customer);
-					word = "MENU";
-				} else {
-					flowDynamic([
-						{
-							body: `Porfavor, escriba la palabra *${word}* para continuar.`,
-						},
-					]);
-				}
 			}
 		}
-	)
-	.addAnswer(
-		`_Esperando respuesta..._`,
-		{
-			capture: true,
-			delay: functions.randomIntFromInterval(400, 600),
-		},
-		(ctx, { fallBack }) => {
-			if (ctx.body !== word) {
-				return fallBack(
-					`⚠ ¡Porfavor, escriba la palabra *${word}* correctamente!.`
-				);
-			} else {
-				word = "REGISTRO";
-			}
-		},
-		[mainSignUp.mainSignUp, mainMenu.mainMenu]
 	);
 
 module.exports = {

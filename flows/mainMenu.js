@@ -6,9 +6,17 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 const exitMessage = {
 	body: ["¡Muchas gracias!", "Tenga buen día 👋."].join("\n"),
 };
-const regexMenu = /^(MENU)$/;
 
-const mainMenu = addKeyword(["MENU"], {
+//Flows Required
+const mainAssistant = require("./mainAssistant.js");
+
+//Keywords Regex
+const regex = "^(0)$";
+
+//Options Regex
+const validatorRegex = "^(0|1|2|3|4|ASESOR)$";
+
+const mainMenu = addKeyword([regex], {
 	regex: true,
 })
 	.addAnswer(
@@ -27,15 +35,10 @@ const mainMenu = addKeyword(["MENU"], {
 			delay: functions.randomIntFromInterval(400, 600),
 		},
 		async (ctx, { fallBack, flowDynamic, endFlow }) => {
-			if (
-				ctx.body !== "1" &&
-				ctx.body !== "2" &&
-				ctx.body !== "3" &&
-				ctx.body !== "4"
-			) {
+			if (!ctx.body.match(validatorRegex)) {
 				return fallBack(
 					[
-						"*⚠ _Seleccione una opción correcta:_*",
+						"*⚠ Seleccione una opción correcta:*",
 						"",
 						"1️⃣. Venta de Juegos Originales.",
 						"2️⃣. Información de Contacto.",
@@ -60,18 +63,28 @@ const mainMenu = addKeyword(["MENU"], {
 	)
 	.addAnswer(
 		[
-			"Para regresar escriba *MENU*.",
-			"Si desea comunícarse con una persona escriba *ASESOR*.",
+			"👤 Si desea contactarse con una persona escriba *ASESOR*.",
+			"Porfavor, seleccione un *NÚMERO* para continuar.",
+			"",
+			"0️⃣. Regresar",
+			"1️⃣. Salir",
 		],
 		{
 			capture: true,
 			delay: functions.randomIntFromInterval(400, 600),
 		},
-		(ctx, { fallBack }) => {
-			if (ctx.body !== "MENU" && ctx.body !== "ASESOR") {
+		(ctx, { fallBack, endFlow }) => {
+			if (!ctx.body.match(validatorRegex)) {
 				return fallBack(
-					"⚠ ¡Porfavor, escriba la palabra *MENU* o *ASESOR* correctamente!."
+					[
+						"*⚠ Seleccione una opción correcta:*",
+						"",
+						"0️⃣. Regresar",
+						"1️⃣. Salir",
+					].join("\n")
 				);
+			} else if (ctx.body === "1") {
+				return endFlow(exitMessage);
 			}
 		}
 	);
