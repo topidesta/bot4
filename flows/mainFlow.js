@@ -14,6 +14,18 @@ const validatorRegex = "^(1|2)$";
 
 //Main Flow
 const mainFlow = addKeyword([EVENTS.WELCOME])
+	.addAction(async (ctx, { endFlow }) => {
+		const status = await strapi.getChatbotBySlug("rysthbot");
+		if (!status) {
+			return endFlow({
+				body: [
+					"👋 ¡Buen día!",
+					"Por el momento el servicio se encuentra deshabilitado.",
+					"Lamento el inconveniente, pase bien.",
+				].join("\n"),
+			});
+		}
+	})
 	.addAnswer(
 		[
 			"👋 ¡Buen día!",

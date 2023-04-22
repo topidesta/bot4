@@ -74,9 +74,22 @@ async function getCustomerByPhone(phone) {
 
 	return answer;
 }
+
+//Get a Chatbot to check if his Status is True using his Name by Phone.
+async function getChatbotBySlug(slug) {
+	const customer = await fetch(
+		`${URL}/chatbots?filters[slug][$eq]=rysthbot`
+	).then((response) => response.json());
+
+	let { data } = customer;
+
+	return data[0].attributes.status;
+}
+
 //Need to export each Function,Array,Variable,etc..
 module.exports = {
 	getServiceByID,
 	setCustomer,
 	getCustomerByPhone,
+	getChatbotBySlug,
 };
