@@ -65,7 +65,7 @@ async function getCustomerByPhone(phone) {
 		answer = [
 			{
 				body: [
-					`Bienvenid@ nuevamente *${data[0].attributes.name.toUpperCase()}*.`,
+					`🙂 Bienvenid@ nuevamente *${data[0].attributes.name.toUpperCase()}*.`,
 					`Porfavor, escriba la palabra *MENU* para continuar.`,
 				].join("\n"),
 			},

@@ -11,7 +11,7 @@ const exitMessage = {
 const mainAssistant = require("./mainAssistant.js");
 
 //Keywords Regex
-const regex = "^(0)$";
+const regex = "^(MENU)$";
 
 //Options Regex
 const validatorRegex = "^(0|1|2|3|4|ASESOR)$";
@@ -64,26 +64,30 @@ const mainMenu = addKeyword([regex], {
 	.addAnswer(
 		[
 			"👤 Si desea contactarse con una persona escriba *ASESOR*.",
-			"Porfavor, seleccione un *NÚMERO* para continuar.",
+			"Para regresar escriba *MENU*.",
 			"",
-			"0️⃣. Regresar",
-			"1️⃣. Salir",
+			"0️⃣. Salir",
 		],
 		{
 			capture: true,
 			delay: functions.randomIntFromInterval(400, 600),
 		},
 		(ctx, { fallBack, endFlow }) => {
-			if (!ctx.body.match(validatorRegex)) {
+			if (
+				ctx.body !== "0" &&
+				ctx.body !== "MENU" &&
+				ctx.body !== "ASESOR"
+			) {
 				return fallBack(
 					[
 						"*⚠ Seleccione una opción correcta:*",
+						"👤 Si desea contactarse con una persona escriba *ASESOR*.",
+						"Para regresar escriba *MENU*.",
 						"",
-						"0️⃣. Regresar",
-						"1️⃣. Salir",
+						"0️⃣. Salir",
 					].join("\n")
 				);
-			} else if (ctx.body === "1") {
+			} else if (ctx.body === "0") {
 				return endFlow(exitMessage);
 			}
 		}

@@ -11,7 +11,7 @@ const exitMessage = {
 const regex = "^(ASESOR)$";
 
 //Options Regex
-const validatorRegex = "^(0|1)$";
+const validatorRegex = "^(0|MENU)$";
 
 const mainAssistant = addKeyword([regex], {
 	sensitive: true,
@@ -42,12 +42,7 @@ const mainAssistant = addKeyword([regex], {
 		}
 	)
 	.addAnswer(
-		[
-			"Porfavor, seleccione un *NÚMERO* para continuar.",
-			"",
-			"0️⃣. Regresar",
-			"1️⃣. Salir",
-		],
+		["Para regresar escriba *MENU*.", "", "0️⃣. Salir"],
 		{
 			capture: true,
 			delay: functions.randomIntFromInterval(400, 600),
@@ -57,12 +52,12 @@ const mainAssistant = addKeyword([regex], {
 				return fallBack(
 					[
 						"*⚠ Seleccione una opción correcta:*",
+						"Para regresar escriba *MENU*.",
 						"",
-						"0️⃣. Regresar",
-						"1️⃣. Salir",
+						"0️⃣. Salir",
 					].join("\n")
 				);
-			} else if (ctx.body === "1") {
+			} else if (ctx.body === "0") {
 				return endFlow(exitMessage);
 			}
 		}
