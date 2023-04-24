@@ -70,7 +70,7 @@ const mainMenu = addKeyword([regex], {
 		],
 		{
 			capture: true,
-			delay: functions.randomIntFromInterval(400, 600),
+			delay: functions.randomIntFromInterval(1000, 1500),
 		},
 		(ctx, { fallBack, endFlow }) => {
 			if (

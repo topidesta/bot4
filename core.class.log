@@ -1,8 +1,8 @@
 [handleMsg]:  {
-  id: 'false_593988949117@c.us_3EB0AA085F5DD1D4F9B092',
-  body: 'hola',
+  id: 'false_593988949117@c.us_3EB0739BEFEDBB17430D5B',
+  body: 'hgasdas',
   type: 'chat',
-  t: 1682178468,
+  t: 1682349499,
   notifyName: 'John Palacios',
   from: '593988949117',
   to: '593988936995@c.us',
@@ -59,8 +59,8 @@
     profilePicThumbObj: {},
     msgs: null
   },
-  timestamp: 1682178468,
-  content: 'hola',
+  timestamp: 1682349499,
+  content: 'hgasdas',
   chat: {},
   mediaData: {}
 }

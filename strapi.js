@@ -58,11 +58,11 @@ async function getCustomerByPhone(phone) {
 		`${URL}/customers?filters[phone][$eq]=${phone}&fields=name`
 	).then((response) => response.json());
 
-	let answer = null;
+	let status = null;
 	let { data } = customer;
 
 	if (data.length !== 0) {
-		answer = [
+		status = [
 			{
 				body: [
 					`🙂 Bienvenid@ nuevamente *${data[0].attributes.name.toUpperCase()}*.`,
@@ -72,18 +72,23 @@ async function getCustomerByPhone(phone) {
 		];
 	}
 
-	return answer;
+	return status;
 }
 
 //Get a Chatbot to check if his Status is True using his Name by Phone.
 async function getChatbotBySlug(slug) {
 	const customer = await fetch(
-		`${URL}/chatbots?filters[slug][$eq]=rysthbot`
+		`${URL}/chatbots?filters[slug][$eq]=rysthbot&fields=status,slug`
 	).then((response) => response.json());
 
+	let status = null;
 	let { data } = customer;
 
-	return data[0].attributes.status;
+	if (data.length !== 0) {
+		status = data[0].attributes.status;
+	}
+
+	return status;
 }
 
 //Need to export each Function,Array,Variable,etc..

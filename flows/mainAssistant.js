@@ -20,7 +20,8 @@ const mainAssistant = addKeyword([regex], {
 		[
 			"📩 *¡Servicio de Atención al Cliente!*".toUpperCase(),
 			"",
-			"_Porfavor a continuación escriba *un* solo mensaje detallando su solicitud._",
+			"Porfavor a continuación escriba *un* solo mensaje detallando su solicitud.",
+			"_Ej. (Buen día, me gustaría contratar uno de sus servicios...)_",
 		],
 		{
 			capture: true,
